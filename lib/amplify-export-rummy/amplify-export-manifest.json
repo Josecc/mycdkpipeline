@@ -1,0 +1,117 @@
+{
+  "stackName": "amplify-rummy-dev-123603",
+  "props": {
+    "templateFile": "root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-rummy-dev-123603-authRole",
+      "UnauthRoleName": "amplify-rummy-dev-123603-unauthRole",
+      "DeploymentBucketName": "amplify-rummy-dev-123603-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "apirummy": {
+        "templateFile": "api/rummy/cloudformation-template.json",
+        "parameters": {
+          "AppSyncApiName": "rummy",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": false,
+          "S3DeploymentBucket": "amplify-rummy-dev-123603-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/0845e3185984e9fa1bb9e2652322102900f81639",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {
+          "ConnectionStack": {
+            "templateFile": "api/rummy/amplify-appsync-files/stacks/ConnectionStack.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "CustomResourcesjson": {
+            "templateFile": "api/rummy/amplify-appsync-files/stacks/CustomResources.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Game": {
+            "templateFile": "api/rummy/amplify-appsync-files/stacks/Game.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Player": {
+            "templateFile": "api/rummy/amplify-appsync-files/stacks/Player.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Score": {
+            "templateFile": "api/rummy/amplify-appsync-files/stacks/Score.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Tournament": {
+            "templateFile": "api/rummy/amplify-appsync-files/stacks/Tournament.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          }
+        }
+      },
+      "authrummy86bcf00c": {
+        "templateFile": "auth/rummy86bcf00c/rummy86bcf00c-cloudformation-template.json",
+        "parameters": {
+          "identityPoolName": "rummy86bcf00c_identitypool_86bcf00c",
+          "allowUnauthenticatedIdentities": false,
+          "resourceNameTruncated": "rummy86bcf00c",
+          "userPoolName": "rummy86bcf00c_userpool_86bcf00c",
+          "autoVerifiedAttributes": [
+            "email"
+          ],
+          "mfaConfiguration": "OFF",
+          "mfaTypes": [
+            "SMS Text Message"
+          ],
+          "smsAuthenticationMessage": "Your authentication code is {####}",
+          "smsVerificationMessage": "Your verification code is {####}",
+          "emailVerificationSubject": "Your verification code",
+          "emailVerificationMessage": "Your verification code is {####}",
+          "defaultPasswordPolicy": false,
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [],
+          "requiredAttributes": [
+            "email"
+          ],
+          "aliasAttributes": [],
+          "userpoolClientGenerateSecret": false,
+          "userpoolClientRefreshTokenValidity": 30,
+          "userpoolClientWriteAttributes": [
+            "email"
+          ],
+          "userpoolClientReadAttributes": [
+            "email"
+          ],
+          "userpoolClientLambdaRole": "rummy886bcf00c_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "sharedId": "86bcf00c",
+          "resourceName": "rummy86bcf00c",
+          "authSelections": "identityPoolAndUserPool",
+          "useDefault": "defaultSocial",
+          "hostedUI": true,
+          "usernameAttributes": [
+            "email, phone_number"
+          ],
+          "hostedUIDomainName": "rummy-canahui",
+          "authProvidersUserPool": [],
+          "hostedUIProviderMeta": "[]",
+          "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://rummy.canahui.dev/signin/redirect/\"],\"LogoutURLs\":[\"https://rummy.canahui.dev/signout/redirect/\"]}",
+          "userPoolGroupList": [],
+          "serviceName": "Cognito",
+          "usernameCaseSensitive": false,
+          "useEnabledMfas": true,
+          "breakCircularDependency": true,
+          "dependsOn": [],
+          "hostedUIProviderCreds": "[]",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      }
+    }
+  }
+}

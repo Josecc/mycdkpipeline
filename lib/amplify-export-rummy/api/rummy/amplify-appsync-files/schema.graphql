@@ -1,0 +1,347 @@
+
+type Game @aws_api_key {
+  id: ID!
+  time: AWSDateTime!
+  scores(filter: ModelScoreFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelScoreConnection
+  tournament: Tournament
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  tournamentGamesId: ID
+}
+
+type Score @aws_api_key {
+  id: ID!
+  score: Int!
+  game: Game!
+  player: Player!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  gameScoresId: ID
+  playerScoresId: ID
+}
+
+type Player @aws_api_key {
+  id: ID!
+  name: String!
+  scores(filter: ModelScoreFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelScoreConnection
+  friends(filter: ModelPlayerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlayerConnection
+  firendRequests(filter: ModelPlayerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlayerConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  playerFriendsId: ID
+  playerFirendRequestsId: ID
+  tournamentPlayersId: ID
+  tournamentOrganizersId: ID
+}
+
+type Tournament @aws_api_key {
+  id: ID!
+  name: String!
+  goal: Int!
+  players(filter: ModelPlayerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlayerConnection
+  organizers(filter: ModelPlayerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlayerConnection
+  games(filter: ModelGameFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGameConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelGameConnection @aws_api_key {
+  items: [Game]!
+  nextToken: String
+}
+
+input ModelGameFilterInput {
+  id: ModelIDInput
+  time: ModelStringInput
+  and: [ModelGameFilterInput]
+  or: [ModelGameFilterInput]
+  not: ModelGameFilterInput
+  tournamentGamesId: ModelIDInput
+}
+
+type Query {
+  getGame(id: ID!): Game @aws_api_key
+  listGames(filter: ModelGameFilterInput, limit: Int, nextToken: String): ModelGameConnection @aws_api_key
+  getScore(id: ID!): Score @aws_api_key
+  listScores(filter: ModelScoreFilterInput, limit: Int, nextToken: String): ModelScoreConnection @aws_api_key
+  getPlayer(id: ID!): Player @aws_api_key
+  listPlayers(filter: ModelPlayerFilterInput, limit: Int, nextToken: String): ModelPlayerConnection @aws_api_key
+  getTournament(id: ID!): Tournament @aws_api_key
+  listTournaments(filter: ModelTournamentFilterInput, limit: Int, nextToken: String): ModelTournamentConnection @aws_api_key
+}
+
+input ModelGameConditionInput {
+  time: ModelStringInput
+  and: [ModelGameConditionInput]
+  or: [ModelGameConditionInput]
+  not: ModelGameConditionInput
+  tournamentGamesId: ModelIDInput
+}
+
+input CreateGameInput {
+  id: ID
+  time: AWSDateTime!
+  tournamentGamesId: ID
+}
+
+input UpdateGameInput {
+  id: ID!
+  time: AWSDateTime
+  tournamentGamesId: ID
+}
+
+input DeleteGameInput {
+  id: ID!
+}
+
+type Mutation {
+  createGame(input: CreateGameInput!, condition: ModelGameConditionInput): Game @aws_api_key
+  updateGame(input: UpdateGameInput!, condition: ModelGameConditionInput): Game @aws_api_key
+  deleteGame(input: DeleteGameInput!, condition: ModelGameConditionInput): Game @aws_api_key
+  createScore(input: CreateScoreInput!, condition: ModelScoreConditionInput): Score @aws_api_key
+  updateScore(input: UpdateScoreInput!, condition: ModelScoreConditionInput): Score @aws_api_key
+  deleteScore(input: DeleteScoreInput!, condition: ModelScoreConditionInput): Score @aws_api_key
+  createPlayer(input: CreatePlayerInput!, condition: ModelPlayerConditionInput): Player @aws_api_key
+  updatePlayer(input: UpdatePlayerInput!, condition: ModelPlayerConditionInput): Player @aws_api_key
+  deletePlayer(input: DeletePlayerInput!, condition: ModelPlayerConditionInput): Player @aws_api_key
+  createTournament(input: CreateTournamentInput!, condition: ModelTournamentConditionInput): Tournament @aws_api_key
+  updateTournament(input: UpdateTournamentInput!, condition: ModelTournamentConditionInput): Tournament @aws_api_key
+  deleteTournament(input: DeleteTournamentInput!, condition: ModelTournamentConditionInput): Tournament @aws_api_key
+}
+
+type Subscription {
+  onCreateGame: Game @aws_subscribe(mutations: ["createGame"]) @aws_api_key
+  onUpdateGame: Game @aws_subscribe(mutations: ["updateGame"]) @aws_api_key
+  onDeleteGame: Game @aws_subscribe(mutations: ["deleteGame"]) @aws_api_key
+  onCreateScore: Score @aws_subscribe(mutations: ["createScore"]) @aws_api_key
+  onUpdateScore: Score @aws_subscribe(mutations: ["updateScore"]) @aws_api_key
+  onDeleteScore: Score @aws_subscribe(mutations: ["deleteScore"]) @aws_api_key
+  onCreatePlayer: Player @aws_subscribe(mutations: ["createPlayer"]) @aws_api_key
+  onUpdatePlayer: Player @aws_subscribe(mutations: ["updatePlayer"]) @aws_api_key
+  onDeletePlayer: Player @aws_subscribe(mutations: ["deletePlayer"]) @aws_api_key
+  onCreateTournament: Tournament @aws_subscribe(mutations: ["createTournament"]) @aws_api_key
+  onUpdateTournament: Tournament @aws_subscribe(mutations: ["updateTournament"]) @aws_api_key
+  onDeleteTournament: Tournament @aws_subscribe(mutations: ["deleteTournament"]) @aws_api_key
+}
+
+type ModelScoreConnection @aws_api_key {
+  items: [Score]!
+  nextToken: String
+}
+
+input ModelScoreFilterInput {
+  id: ModelIDInput
+  score: ModelIntInput
+  and: [ModelScoreFilterInput]
+  or: [ModelScoreFilterInput]
+  not: ModelScoreFilterInput
+  gameScoresId: ModelIDInput
+  playerScoresId: ModelIDInput
+}
+
+input ModelScoreConditionInput {
+  score: ModelIntInput
+  and: [ModelScoreConditionInput]
+  or: [ModelScoreConditionInput]
+  not: ModelScoreConditionInput
+  gameScoresId: ModelIDInput
+  playerScoresId: ModelIDInput
+}
+
+input CreateScoreInput {
+  id: ID
+  score: Int!
+  gameScoresId: ID
+  playerScoresId: ID
+}
+
+input UpdateScoreInput {
+  id: ID!
+  score: Int
+  gameScoresId: ID
+  playerScoresId: ID
+}
+
+input DeleteScoreInput {
+  id: ID!
+}
+
+type ModelPlayerConnection @aws_api_key {
+  items: [Player]!
+  nextToken: String
+}
+
+input ModelPlayerFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelPlayerFilterInput]
+  or: [ModelPlayerFilterInput]
+  not: ModelPlayerFilterInput
+  playerFriendsId: ModelIDInput
+  playerFirendRequestsId: ModelIDInput
+  tournamentPlayersId: ModelIDInput
+  tournamentOrganizersId: ModelIDInput
+}
+
+input ModelPlayerConditionInput {
+  name: ModelStringInput
+  and: [ModelPlayerConditionInput]
+  or: [ModelPlayerConditionInput]
+  not: ModelPlayerConditionInput
+  playerFriendsId: ModelIDInput
+  playerFirendRequestsId: ModelIDInput
+  tournamentPlayersId: ModelIDInput
+  tournamentOrganizersId: ModelIDInput
+}
+
+input CreatePlayerInput {
+  id: ID
+  name: String!
+  playerFriendsId: ID
+  playerFirendRequestsId: ID
+  tournamentPlayersId: ID
+  tournamentOrganizersId: ID
+}
+
+input UpdatePlayerInput {
+  id: ID!
+  name: String
+  playerFriendsId: ID
+  playerFirendRequestsId: ID
+  tournamentPlayersId: ID
+  tournamentOrganizersId: ID
+}
+
+input DeletePlayerInput {
+  id: ID!
+}
+
+type ModelTournamentConnection @aws_api_key {
+  items: [Tournament]!
+  nextToken: String
+}
+
+input ModelTournamentFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  goal: ModelIntInput
+  and: [ModelTournamentFilterInput]
+  or: [ModelTournamentFilterInput]
+  not: ModelTournamentFilterInput
+}
+
+input ModelTournamentConditionInput {
+  name: ModelStringInput
+  goal: ModelIntInput
+  and: [ModelTournamentConditionInput]
+  or: [ModelTournamentConditionInput]
+  not: ModelTournamentConditionInput
+}
+
+input CreateTournamentInput {
+  id: ID
+  name: String!
+  goal: Int!
+}
+
+input UpdateTournamentInput {
+  id: ID!
+  name: String
+  goal: Int
+}
+
+input DeleteTournamentInput {
+  id: ID!
+}
+

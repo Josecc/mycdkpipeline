@@ -1,0 +1,12 @@
+[
+  {
+    "category": "auth",
+    "resourceName": "rummy86bcf00c",
+    "service": "Cognito"
+  },
+  {
+    "category": "api",
+    "resourceName": "rummy",
+    "service": "AppSync"
+  }
+]
